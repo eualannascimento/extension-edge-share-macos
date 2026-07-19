@@ -3,6 +3,8 @@
   "name": "Compartilhar com o macOS",
   "description": "Aciona o Share Sheet nativo do macOS (AirDrop e outros apps) para a aba ativa no Edge.",
   "version": "0.1.0",
+  "author": "Alan Nascimento",
+  "homepage_url": "https://github.com/eualannascimento/macos-share-edge-extension",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",
