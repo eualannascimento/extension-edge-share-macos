@@ -1,0 +1,29 @@
+# Segredos e ambiente
+.env
+.env.*
+!.env.example
+
+# Dependências e builds
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDEs e SO
+.DS_Store
+.idea/
+.vscode/
+
+# Cobertura e caches de teste
+coverage/
+.coverage
+.pytest_cache/
+
+# Worktrees do Claude Code
+.claude/worktrees/
+
+# Diarios de execucao do workflow SDD (estado transitorio)
+.docs/journal/

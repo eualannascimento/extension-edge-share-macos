@@ -1,0 +1,22 @@
+# Gate de estilo do repositorio (regras E01/E02 de .rules/anti-ai-style.md).
+# Falha o CI se qualquer arquivo versionado contiver travessao (U+2014),
+# meia-risca (U+2013) ou aspas curvas (U+201C/U+201D).
+# Apenas caracteres sao verificados aqui: sao deterministicos e sem falso
+# positivo. O vocabulario (E04/E05) continua como instrucao para a IA.
+name: style-gate
+on:
+  push:
+  pull_request:
+jobs:
+  forbidden-chars:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bloquear travessao, meia-risca e aspas curvas
+        run: |
+          pat=$(printf '\xe2\x80\x94|\xe2\x80\x93|\xe2\x80\x9c|\xe2\x80\x9d')
+          if grep -rnE "$pat" --exclude-dir=.git .; then
+            echo "Caracteres proibidos encontrados. Substitua por hifen e aspas retas (ver .rules/anti-ai-style.md, E01 e E02)."
+            exit 1
+          fi
+          echo "Nenhum caractere proibido encontrado."
