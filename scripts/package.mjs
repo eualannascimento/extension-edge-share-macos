@@ -8,10 +8,15 @@ const { version } = JSON.parse(readFileSync(path.join(rootDir, "package.json"), 
 
 const EXPECTED_ENTRIES = [
   "manifest.json",
+  "offscreen.html",
   "dist/background.js",
-  "icons/icon-16.png",
-  "icons/icon-48.png",
-  "icons/icon-128.png",
+  "dist/offscreen.js",
+  "icons/white/icon-16.png",
+  "icons/white/icon-48.png",
+  "icons/white/icon-128.png",
+  "icons/dark/icon-16.png",
+  "icons/dark/icon-48.png",
+  "icons/dark/icon-128.png",
 ];
 
 const missing = EXPECTED_ENTRIES.filter((entry) => !existsSync(path.join(rootDir, entry)));

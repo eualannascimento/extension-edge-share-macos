@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Extensao Edge/Chromium para acionar o Share Sheet nativo do macOS a partir da aba ativa.",
   "scripts": {
-    "build": "esbuild src/background.ts --bundle --format=esm --outfile=dist/background.js",
+    "build": "esbuild src/background.ts src/offscreen.ts --bundle --format=esm --outdir=dist",
     "generate-icons": "node scripts/generate-icons.mjs",
     "package": "npm run build && node scripts/package.mjs",
     "test": "vitest run",
@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.280",
+    "@types/chrome": "^0.2.2",
     "@types/node": "^26.1.1",
     "esbuild": "^0.28.1",
     "typescript": "^5.6.3",
