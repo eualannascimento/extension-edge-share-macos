@@ -2,6 +2,7 @@
   "name": "macos-share-edge-extension",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Extensao Edge/Chromium para acionar o Share Sheet nativo do macOS a partir da aba ativa.",
   "scripts": {
