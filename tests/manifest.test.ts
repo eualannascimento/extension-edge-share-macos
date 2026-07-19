@@ -13,3 +13,14 @@ describe("manifest.json: campos de preparacao para loja", () => {
     expect(manifest.homepage_url).toMatch(/^https:\/\/github\.com\//);
   });
 });
+
+describe("manifest.json: deteccao de tema", () => {
+  it("CA03: inclui a permissao offscreen", () => {
+    expect(manifest.permissions).toContain("offscreen");
+  });
+
+  it("icons/action.default_icon apontam para o conjunto branco (fallback)", () => {
+    expect(manifest.icons["128"]).toBe("icons/white/icon-128.png");
+    expect(manifest.action.default_icon["128"]).toBe("icons/white/icon-128.png");
+  });
+});
