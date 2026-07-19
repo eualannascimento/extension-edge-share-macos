@@ -1,6 +1,6 @@
 # Botao de Compartilhamento Nativo do macOS na Toolbar
 
-**Status:** Pronto para Commit
+**Status:** Concluído
 **Data:** 2026-07-18
 
 ## 1. Resumo e Objetivo
