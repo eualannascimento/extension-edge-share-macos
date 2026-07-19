@@ -12,6 +12,16 @@ O icone tambem acompanha o tema do Edge: branco quando a toolbar esta escura, ci
 
 Em paginas onde o navegador bloqueia scripts (`chrome://`, `edge://`, lojas de extensao), uma notificacao avisa que ali nao rola. Erros tecnicos tambem avisam; cancelar o Share Sheet e silencioso, sem popup de erro.
 
+## Demonstracao
+
+Extensao instalada no Edge, icone visivel na toolbar (branco, tema escuro) e o Share Sheet nativo abrindo com AirDrop, Mail, Messages e Reminders:
+
+<p>
+  <img src="img/demo-01-extensao-instalada.png" alt="Extensao Compartilhar com o macOS instalada e ativada em edge://extensions" width="420"><br>
+  <img src="img/demo-02-icone-na-toolbar.png" alt="Icone da extensao visivel na barra de ferramentas do Edge, tema escuro" width="420"><br>
+  <img src="img/demo-03-share-sheet-aberto.png" alt="Share Sheet nativo do macOS aberto com opcoes de AirDrop, Mail, Messages e Reminders" width="260">
+</p>
+
 ## Instalar
 
 Sem loja por enquanto, entao a instalacao e direto do codigo:
