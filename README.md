@@ -1,42 +1,46 @@
 # Compartilhar com o macOS
 
-Extensao para o Microsoft Edge (Manifest V3, compativel com Chrome) que devolve o botao de compartilhamento nativo do macOS dentro do navegador. No macOS, o Edge nao expoe mais um botao de share que abra o Share Sheet do sistema (AirDrop, Mensagens, Lembretes e demais apps); esta extensao adiciona um icone na barra de ferramentas que faz exatamente isso.
+O botao de share que o Edge tirou do Mac, de volta.
 
-## Como funciona
+No macOS, o Edge parou de mostrar o botao de compartilhamento nativo (o que abre AirDrop, Mensagens, Lembretes e o resto). Esta extensao devolve isso: um icone na toolbar que abre o Share Sheet do sistema para a aba que voce esta vendo.
 
-Um clique no icone da toolbar aciona `navigator.share({ title, url })` na aba ativa, abrindo o Share Sheet nativo do macOS com o titulo e a URL da pagina atual. Nao ha popup nem tela intermediaria - o clique vai direto para o compartilhamento do sistema.
+## O que ela faz
 
-O icone se adapta automaticamente ao tema do Edge: branco quando a toolbar esta no tema escuro, cinza-escuro quando esta no tema claro, trocando em tempo real se voce mudar o tema com o navegador aberto.
+Clique no icone. O Share Sheet do macOS abre com o titulo e a URL da aba atual. Sem popup, sem tela extra no meio do caminho.
 
-Paginas onde o navegador nao permite injetar script (`chrome://`, `edge://`, lojas de extensao) mostram uma notificacao explicando que o compartilhamento nao e suportado ali. Falhas tecnicas tambem geram notificacao; cancelar o Share Sheet e silencioso.
+O icone tambem acompanha o tema do Edge: branco quando a toolbar esta escura, cinza quando esta clara, e troca sozinho se voce mudar o tema com o navegador aberto.
 
-## Instalar (uso pessoal, sem loja)
+Em paginas onde o navegador bloqueia scripts (`chrome://`, `edge://`, lojas de extensao), uma notificacao avisa que ali nao rola. Erros tecnicos tambem avisam; cancelar o Share Sheet e silencioso, sem popup de erro.
+
+## Instalar
+
+Sem loja por enquanto, entao a instalacao e direto do codigo:
 
 ```bash
 npm install
 npm run build
 ```
 
-Depois, no Edge: `edge://extensions` → ative o **Modo de desenvolvedor** → **Carregar sem pacote** → selecione a pasta deste repositorio.
+No Edge: `edge://extensions` -> Modo de desenvolvedor -> Carregar sem pacote -> selecione esta pasta.
 
 ## Desenvolvimento
 
 ```bash
 npm test          # suite de testes (Vitest)
-npm run typecheck # checagem de tipos (TypeScript)
+npm run typecheck # checagem de tipos
 npm run build     # gera dist/background.js e dist/offscreen.js
-npm run package   # build + gera um .zip pronto para submissao a lojas
+npm run package   # build + .zip pronto para submissao a lojas
 ```
 
-O icone e gerado programaticamente (sem ferramentas de design externas) por `scripts/generate-icons.mjs`; rode `npm run generate-icons` para regenerar `icons/white/` e `icons/dark/` caso o desenho mude.
+O icone e desenhado por codigo, sem nenhuma ferramenta de design externa. Rode `npm run generate-icons` para regerar `icons/white/` e `icons/dark/` se o desenho mudar.
 
 ## Stack
 
-TypeScript, sem framework de UI (a extensao nao tem popup visivel). Testes com Vitest, bundle com esbuild.
+TypeScript puro, sem framework de UI (a extensao nao tem popup visivel). Vitest para os testes, esbuild para o bundle.
 
-## Workflow deste repositorio
+## Como este repositorio e mantido
 
-Este projeto segue o fluxo de Spec-Driven Development descrito em `.rules/global.md`: toda funcionalidade nasce de um Spec aprovado em `.docs/specs/` antes de qualquer codigo, com testes escritos primeiro (TDD) e revisao independente antes do merge.
+Cada funcionalidade nasce de um spec aprovado em `.docs/specs/`, com testes escritos antes do codigo e revisao independente antes do merge. O fluxo completo esta em `.rules/global.md`.
 
 ## Licenca
 
