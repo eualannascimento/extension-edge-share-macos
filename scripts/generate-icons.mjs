@@ -1,14 +1,17 @@
 import zlib from "node:zlib";
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const rootDir = fileURLToPath(new URL("..", import.meta.url));
 const outDir = path.join(rootDir, "icons");
 
-const FOREGROUND = [60, 60, 67, 255];
 const BACKGROUND = [0, 0, 0, 0];
 const SIZES = [16, 48, 128];
+const THEMES = [
+  { folder: "white", color: [255, 255, 255, 255] },
+  { folder: "dark", color: [60, 60, 67, 255] },
+];
 
 function segDistance(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1;
@@ -21,8 +24,27 @@ function segDistance(px, py, x1, y1, x2, y2) {
   return Math.hypot(px - projX, py - projY);
 }
 
+function arcSegments(cx, cy, r, startDeg, endDeg, steps = 6) {
+  const segments = [];
+  const startRad = (startDeg * Math.PI) / 180;
+  const endRad = (endDeg * Math.PI) / 180;
+  let prevX = cx + r * Math.cos(startRad);
+  let prevY = cy + r * Math.sin(startRad);
+  for (let i = 1; i <= steps; i++) {
+    const t = startRad + ((endRad - startRad) * i) / steps;
+    const x = cx + r * Math.cos(t);
+    const y = cy + r * Math.sin(t);
+    segments.push([prevX, prevY, x, y]);
+    prevX = x;
+    prevY = y;
+  }
+  return segments;
+}
+
+/** Glifo estilo Safari: retangulo com cantos arredondados (tray) e uma seta saindo por cima. */
 function shareGlyphSegments(size) {
   const halfT = Math.max(1.1, size * 0.1) / 2;
+  const radius = size * 0.07;
 
   const boxTop = size * 0.56;
   const boxBottom = size * 0.82;
@@ -38,22 +60,31 @@ function shareGlyphSegments(size) {
   const headHalfW = size * 0.16;
   const headY = size * 0.3;
 
-  return {
-    halfT,
-    segments: [
-      [boxLeft, boxBottom, boxRight, boxBottom],
-      [boxLeft, boxTop, boxLeft, boxBottom],
-      [boxRight, boxTop, boxRight, boxBottom],
-      [boxLeft, boxTop, gapLeft, boxTop],
-      [gapRight, boxTop, boxRight, boxTop],
-      [cx, arrowTop, cx, arrowBottom],
-      [cx, arrowTop, cx - headHalfW, headY],
-      [cx, arrowTop, cx + headHalfW, headY],
-    ],
-  };
+  const segments = [
+    // topo: da direita do gap ate o canto superior direito
+    [gapRight, boxTop, boxRight - radius, boxTop],
+    ...arcSegments(boxRight - radius, boxTop + radius, radius, -90, 0),
+    // lateral direita
+    [boxRight, boxTop + radius, boxRight, boxBottom - radius],
+    ...arcSegments(boxRight - radius, boxBottom - radius, radius, 0, 90),
+    // base
+    [boxRight - radius, boxBottom, boxLeft + radius, boxBottom],
+    ...arcSegments(boxLeft + radius, boxBottom - radius, radius, 90, 180),
+    // lateral esquerda
+    [boxLeft, boxBottom - radius, boxLeft, boxTop + radius],
+    ...arcSegments(boxLeft + radius, boxTop + radius, radius, 180, 270),
+    // topo: do canto superior esquerdo ate a esquerda do gap
+    [boxLeft + radius, boxTop, gapLeft, boxTop],
+    // seta
+    [cx, arrowTop, cx, arrowBottom],
+    [cx, arrowTop, cx - headHalfW, headY],
+    [cx, arrowTop, cx + headHalfW, headY],
+  ];
+
+  return { halfT, segments };
 }
 
-function renderIcon(size) {
+function renderIcon(size, color) {
   const { halfT, segments } = shareGlyphSegments(size);
   const pixels = Buffer.alloc(size * size * 4);
 
@@ -66,9 +97,9 @@ function renderIcon(size) {
         const d = segDistance(px, py, x1, y1, x2, y2);
         if (d < minDist) minDist = d;
       }
-      const color = minDist <= halfT ? FOREGROUND : BACKGROUND;
+      const pixelColor = minDist <= halfT ? color : BACKGROUND;
       const offset = (y * size + x) * 4;
-      pixels.set(color, offset);
+      pixels.set(pixelColor, offset);
     }
   }
 
@@ -109,9 +140,13 @@ function writeRgbaPng(filePath, size, pixels) {
   writeFileSync(filePath, png);
 }
 
-for (const size of SIZES) {
-  const pixels = renderIcon(size);
-  writeRgbaPng(path.join(outDir, `icon-${size}.png`), size, pixels);
+for (const { folder, color } of THEMES) {
+  const themeDir = path.join(outDir, folder);
+  mkdirSync(themeDir, { recursive: true });
+  for (const size of SIZES) {
+    const pixels = renderIcon(size, color);
+    writeRgbaPng(path.join(themeDir, `icon-${size}.png`), size, pixels);
+  }
 }
 
-console.log(`Icones gerados em ${outDir}`);
+console.log(`Icones gerados em ${outDir}/{white,dark}`);
