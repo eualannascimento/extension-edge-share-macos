@@ -27,3 +27,6 @@ coverage/
 
 # Diarios de execucao do workflow SDD (estado transitorio)
 .docs/journal/
+
+# Pacotes gerados para submissao a lojas
+dist-package/
