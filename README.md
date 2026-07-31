@@ -55,3 +55,10 @@ Cada funcionalidade nasce de um spec aprovado em `.docs/specs/`, com testes escr
 ## Licenca
 
 MIT - veja [LICENSE](LICENSE).
+
+
+## Permissões, mensagens e assinatura
+
+O manifest usa somente `activeTab`, `scripting`, `notifications` e `offscreen`, cada uma vinculada a uma necessidade documentada. O contrato de mensagens entre o service worker e o documento offscreen aceita `theme-detected` com `isDark` booleano; mensagens desconhecidas são ignoradas.
+
+Para validar uma instalação limpa: crie um perfil Edge novo, execute `npm ci && npm test && npm run build`, carregue a pasta em `edge://extensions` como extensão sem pacote e teste uma página HTTPS, uma página restrita, o cancelamento do Share Sheet, as notificações e a troca de tema. Para distribuição, use `npm run package`, siga o processo de assinatura da loja e mantenha chaves privadas fora do repositório. Detalhes em [`docs/SECURITY-AND-SIGNING.md`](docs/SECURITY-AND-SIGNING.md).
