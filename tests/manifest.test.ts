@@ -24,3 +24,11 @@ describe("manifest.json: deteccao de tema", () => {
     expect(manifest.action.default_icon["128"]).toBe("icons/white/icon-128.png");
   });
 });
+
+
+describe("manifest.json: permissões mínimas", () => {
+  it("declara apenas as permissões usadas pelo service worker", () => {
+    expect(manifest.permissions).toEqual(["activeTab", "scripting", "notifications", "offscreen"]);
+    expect(manifest.background.service_worker).toBe("dist/background.js");
+  });
+});
